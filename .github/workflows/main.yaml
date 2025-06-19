@@ -14,6 +14,12 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
+      - name: Pull from hub to sync
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git pull --rebase https://data-shogun:$HF_TOKEN@huggingface.co/spaces/data-shogun/text-summarization-app main
+
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
