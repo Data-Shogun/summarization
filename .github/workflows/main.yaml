@@ -9,17 +9,20 @@ on:
 jobs:
   sync-to-hub:
     runs-on: ubuntu-latest
-    steps:
+        steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
           lfs: true
+      - name: Set up Git user
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
       - name: Pull from hub to sync
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git pull --rebase https://data-shogun:$HF_TOKEN@huggingface.co/spaces/data-shogun/text-summarization-app main
-
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
