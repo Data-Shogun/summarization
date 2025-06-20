@@ -1,4 +1,3 @@
-
 import nltk
 import os
 import streamlit as st
@@ -15,17 +14,16 @@ st.subheader('Summarize URL')
 
 api_key = st.sidebar.text_input('Groq API Key', value='', type='password')
 
-# Set up a writable directory for nltk data
-nltk_data_path = os.path.join(os.getcwd(), "nltk_data")
+# Use Hugging Face's writable temp directory
+nltk_data_path = "/tmp/nltk_data"
 os.makedirs(nltk_data_path, exist_ok=True)
 
-# Set the NLTK data path environment variable
-nltk.data.path.append(nltk_data_path)
+# Ensure nltk uses this path
+nltk.data.path = [nltk_data_path]
 
-# Now download necessary resources
-nltk.download("punkt", download_dir=nltk_data_path, quiet=True, force=True)
+# Download required models to the writable directory
+nltk.download("punkt", download_dir=nltk_data_path, quiet=True)
 nltk.download("averaged_perceptron_tagger", download_dir=nltk_data_path, quiet=True)
-nltk.download("averaged_perceptron_tagger_eng", download_dir=nltk_data_path, quiet=True)
 
 if api_key:
     try:
