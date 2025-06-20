@@ -1,5 +1,20 @@
-import nltk
 import os
+import nltk
+
+# Set writable NLTK path
+nltk_data_path = "/tmp/nltk_data"
+os.makedirs(nltk_data_path, exist_ok=True)
+
+# Apply fix globally
+os.environ["NLTK_DATA"] = nltk_data_path
+nltk.data.path = [nltk_data_path]
+
+# Pre-download necessary NLTK models
+nltk.download("punkt", download_dir=nltk_data_path, quiet=True)
+nltk.download("averaged_perceptron_tagger", download_dir=nltk_data_path, quiet=True)
+nltk.download("averaged_perceptron_tagger_eng", download_dir=nltk_data_path, quiet=True)
+
+
 import streamlit as st
 import validators
 
@@ -13,23 +28,6 @@ st.title('🦜 LangChain: Summarize Text from YT or Website')
 st.subheader('Summarize URL')
 
 api_key = st.sidebar.text_input('Groq API Key', value='', type='password')
-
-import nltk
-import os
-
-# Use Hugging Face's writable /tmp dir
-nltk_data_path = "/tmp/nltk_data"
-os.makedirs(nltk_data_path, exist_ok=True)
-
-# Force nltk to use this path globally
-nltk.data.path.clear()
-nltk.data.path.append(nltk_data_path)
-
-# Pre-download what unstructured needs
-nltk.download("punkt", download_dir=nltk_data_path, quiet=True)
-nltk.download("averaged_perceptron_tagger", download_dir=nltk_data_path, quiet=True)
-nltk.download("averaged_perceptron_tagger_eng", download_dir=nltk_data_path, quiet=True)
-
 
 if api_key:
     try:
