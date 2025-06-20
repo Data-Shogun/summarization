@@ -11,7 +11,18 @@ st.title('🦜 LangChain: Summarize Text from YT or Website')
 st.subheader('Summarize URL')
 
 api_key = st.sidebar.text_input('Groq API Key', value='', type='password')
-llm = ChatGroq(groq_api_key=api_key, model='Gemma2-9b-It')
+
+
+if api_key:
+    try:
+        llm = ChatGroq(groq_api_key=api_key, model='Gemma2-9b-It')
+        st.success("Model initialized successfully.")
+        # Now continue using `llm` as needed
+    except Exception as e:
+        st.error(f"Failed to initialize model: {e}")
+else:
+    st.warning("Please enter your Groq API Key to continue.")
+
 prompt_template = """
     Summarize the content provided for you to at least 300 words.
     content: {text}
