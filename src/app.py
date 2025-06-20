@@ -14,16 +14,22 @@ st.subheader('Summarize URL')
 
 api_key = st.sidebar.text_input('Groq API Key', value='', type='password')
 
-# Use Hugging Face's writable temp directory
+import nltk
+import os
+
+# Use Hugging Face's writable /tmp dir
 nltk_data_path = "/tmp/nltk_data"
 os.makedirs(nltk_data_path, exist_ok=True)
 
-# Ensure nltk uses this path
-nltk.data.path = [nltk_data_path]
+# Force nltk to use this path globally
+nltk.data.path.clear()
+nltk.data.path.append(nltk_data_path)
 
-# Download required models to the writable directory
+# Pre-download what unstructured needs
 nltk.download("punkt", download_dir=nltk_data_path, quiet=True)
 nltk.download("averaged_perceptron_tagger", download_dir=nltk_data_path, quiet=True)
+nltk.download("averaged_perceptron_tagger_eng", download_dir=nltk_data_path, quiet=True)
+
 
 if api_key:
     try:
