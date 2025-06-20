@@ -1,24 +1,7 @@
-import os
-import nltk
-
-# Set writable NLTK path
-nltk_data_path = "/tmp/nltk_data"
-os.makedirs(nltk_data_path, exist_ok=True)
-
-# Apply fix globally
-os.environ["NLTK_DATA"] = nltk_data_path
-nltk.data.path = [nltk_data_path]
-
-# Pre-download necessary NLTK models
-nltk.download("punkt", download_dir=nltk_data_path, quiet=True)
-nltk.download("averaged_perceptron_tagger", download_dir=nltk_data_path, quiet=True)
-nltk.download("averaged_perceptron_tagger_eng", download_dir=nltk_data_path, quiet=True)
-
-
 import streamlit as st
 import validators
 
-from langchain_community.document_loaders import YoutubeLoader, UnstructuredURLLoader
+from langchain_community.document_loaders import YoutubeLoader, WebBaseLoader
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langchain.chains.summarize import load_summarize_chain
@@ -58,11 +41,7 @@ if st.button('Summarize'):
         if 'youtube.com' in input_url:
             loader = YoutubeLoader.from_youtube_url(input_url)
         else:
-            loader = UnstructuredURLLoader(
-                urls=[input_url], 
-                ssl_verification=False,
-                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-            )
+            loader = WebBaseLoader(input_url)
         with st.spinner('Please wait ...'):
             try:
                 docs = loader.load()
